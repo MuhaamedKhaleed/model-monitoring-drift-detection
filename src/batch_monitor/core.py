@@ -90,4 +90,4 @@ def compare_batches(
         "drift": any(feature["drift"] for feature in features),
         "features": features,
         "scope": "numeric_covariate_drift_not_model_performance",
-  }
+    }
