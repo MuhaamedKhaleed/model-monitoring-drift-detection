@@ -80,3 +80,8 @@ CI uses a standard public-repository runner only, no cache, artifact upload or i
 Evaluate false-positive rates/power on representative independent batches; define feature schema/reference versioning, repeated-window alert policy and missing/categorical data policy. Add labeled performance monitoring separately with held-out labels and a tested model pipeline. Review privacy and dataset/model rights before sharing data or deploying. No license, production alert policy, release or main merge is implied by this branch.
 
 SciPy method reference: https://docs.scipy.org/doc/scipy-1.15.2/reference/generated/scipy.stats.ks_2samp.html
+
+
+## License scope
+
+New project-owned package/engineering files use the owner's MIT default. See LICENSE and LICENSE-SCOPE.md. This is not permission to relicense historical notebooks, third-party code, datasets, models or weights. Their provenance and terms still need review. Earlier verification entries saying no license was added describe the initial pilot, not this follow-up.
