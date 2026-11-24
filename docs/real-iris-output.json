@@ -1,0 +1,45 @@
+{
+  "dataset": "UCI Iris",
+  "source_url": "https://archive.ics.uci.edu/dataset/53/iris",
+  "download_url": "https://archive.ics.uci.edu/static/public/53/iris.zip",
+  "license": "CC BY 4.0",
+  "attribution": "Fisher, R. (1936). Iris [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C56C76",
+  "sha256": "d11fe30213d36434a0879aab7cb00ce3c812eb7ba2495874438abff7b7b762e9",
+  "real_data": true,
+  "split": "seed42 shuffled disjoint 75/75; illustrative covariate comparison, not temporal drift or model accuracy",
+  "result": {
+    "reference_rows": 75,
+    "current_rows": 75,
+    "alpha": 0.05,
+    "correction": "bonferroni",
+    "feature_threshold": 0.0125,
+    "drift": false,
+    "features": [
+      {
+        "feature": "sepal_length",
+        "statistic": 0.14666666666666667,
+        "p_value": 0.3974450299113081,
+        "drift": false
+      },
+      {
+        "feature": "sepal_width",
+        "statistic": 0.14666666666666667,
+        "p_value": 0.3974450299113081,
+        "drift": false
+      },
+      {
+        "feature": "petal_length",
+        "statistic": 0.09333333333333334,
+        "p_value": 0.9025824944167903,
+        "drift": false
+      },
+      {
+        "feature": "petal_width",
+        "statistic": 0.10666666666666667,
+        "p_value": 0.7906561065069353,
+        "drift": false
+      }
+    ],
+    "scope": "numeric_covariate_drift_not_model_performance"
+  }
+}
