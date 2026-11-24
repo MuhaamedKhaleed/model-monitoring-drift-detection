@@ -15,3 +15,8 @@
 - Statistical assumptions, isolated verification results and remaining work.
 
 No model-performance, production alerting, licensing or release claim.
+
+
+### Engineering follow-up
+- Use the committed uv lock in CI and key dependency-installer caching by that lock.
+- Complete copy-only profile README drafts and clarify historical versus current verification.
