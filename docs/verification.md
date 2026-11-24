@@ -34,3 +34,10 @@ Python 3.11.18, Linux, CPU. No Kaggle access, training, external model files or 
 Only numeric continuous marginal covariate shifts, with independent-observation assumptions, are in scope. Bonferroni corrects across features, not repeated windows. Discrete/tied data, small effective sample size, temporal dependence and joint distribution changes need further work. Minimum 30 is not a power guarantee. Drift is not accuracy loss, p is not a posterior probability, and no rejection does not prove stability.
 
 Notebook fixes are not a complete portable training refactor. Colab/Kaggle setup, licensed data, dependency/version compatibility, full RandomForest/Alibi execution and model performance remain unverified. New package does not deserialize the notebook's joblib objects. No historical plots/accuracy are carried forward as reproduced results. No dataset/model redistribution or license decision.
+
+
+## Gap-closure follow-up (24 November 2026)
+
+The CI source now uses uv 0.13.8 and the committed transitive lock, rather than a new pip resolution of direct pins. Dependency installer caching is keyed by uv.lock. The local matching command is `uv sync --locked --extra dev`, followed by the existing tests/quality commands. This does not cache or publish private datasets, weights or model outputs. Public-repository-only guards remain. The changed workflow's hosted outcome must be checked after publication; prior green runs do not validate a changed workflow.
+
+A complete copy-only project-focused profile README draft is appended to presentation.md. No profile account edits, main merge, PR, release or license change is implied by that text. Historical notebook/full-data/quality limitations remain open, not replaced by a passing synthetic test.
