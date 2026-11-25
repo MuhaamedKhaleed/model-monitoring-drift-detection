@@ -2,6 +2,17 @@
 
 A small local CLI for comparing numeric reference/current CSV batches, extracted alongside a historical Titanic monitoring notebook. It reports featurewise two-sided Kolmogorov-Smirnov statistics with Bonferroni correction. Covariate drift is not a model-accuracy measurement.
 
+## Real-data quickstart (about 1 minute)
+
+Needs Python 3.11 or 3.12 (the locked PyTorch/TensorFlow wheels have no 3.13+ build); `--python 3.11` makes uv fetch it. Needs internet for the first install and downloads, and roughly 2 GB of free RAM.
+
+```sh
+uv sync --python 3.11 --locked --extra dev
+uv run --no-sync python scripts/real_iris.py ./iris-out --download
+uv run --no-sync batch-monitor --reference ./iris-out/reference.csv --current ./iris-out/current.csv
+```
+Output: a JSON drift report on the real UCI Iris data (per-feature KS statistic, p-value, drift yes/no). No model is trained; bring your own two CSVs with numeric columns to monitor your data. Verified from a fresh clone on 25 Nov 2026.
+
 ## Verified scope
 
 The package runs offline on supplied CSV files, requires no account/key, and never loads a saved model, starts training or downloads data. Synthetic identical/shifted numerical checks use real SciPy, not a mocked drift decision. The original notebook's full training/Colab/widget workflow has not been rerun. It remains a historical experiment, not a deployed monitoring service.
