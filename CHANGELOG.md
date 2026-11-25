@@ -28,3 +28,10 @@ Added standalone invented-input backend demo, checked JSON output and documented
 ## Portable notebook follow-up
 
 Replace platform-specific notebook execution with safe-default local package entry points, explicit local input checks and opt-in training. Add notebook execution/argv/failure regressions. Historical model scores and full-scale data training are not claimed reproduced.
+
+## Windowed correction and missing-data policy follow-up
+
+- Add `windows` command and `compare_windows`: Bonferroni familywise level split across features AND supplied windows, per-window JSON and unique-name validation.
+- Add explicit `--on-missing reject|drop` policy; `drop` skips incomplete rows and reports per-input row/missing counts in the JSON. Nonnumeric values remain an error under both policies.
+- Repair CLI dispatch so the notebook's `python -m batch_monitor compare ...` form works alongside the documented bare form; add a real subprocess dispatch regression (the mocked notebook test had missed the breakage).
+- Document the actual windowed run in docs/repeated-windows.md. Correction covers supplied windows only; open-ended alert cadence, categorical drift and labeled performance monitoring remain future scope.
