@@ -45,3 +45,15 @@ A complete copy-only project-focused profile README draft is appended to present
 ## Standalone synthetic demo and CPU container follow-up
 
 `python scripts/demo.py NEW_DIRECTORY` ran successfully in the locked local environment, with actual backend training/artifact/reload/inference where a model backend exists. `docs/demo-output.json` records one actual run, labeled synthetic-only with no quality claim. A subprocess regression checks the report and no-overwrite behavior. Tests, lint/format and package mypy rerun locally. OCR demo is decoder-only, monitoring uses actual SciPy. `Dockerfile.ml` is opt-in where applicable; hosted build/run evidence must be checked after publication, not inferred from local Python.
+
+## Windowed correction, missing-data policy and CLI dispatch follow-up (25 November 2026)
+
+Python 3.11.18, Linux, CPU, locked `uv sync --locked --extra dev` environment. Base revision 03d6023.
+
+- `python -m pytest --cov=batch_monitor --cov-report=term-missing`: 43 tests pass, 100% statement coverage. New tests cover the feature x window threshold split, injected-backend call counts, actual SciPy stable/shifted windows, missing-policy reject/drop/counts, duplicate window names, and both CLI forms.
+- `python -m ruff check src tests`, `python -m ruff format --check src tests`, `python -m mypy src`: pass.
+- Real subprocess dispatch check: `python -m batch_monitor compare --reference R --current C` and the bare form return identical drift JSON; `python -m batch_monitor windows ...` returns per-window results. Previously the notebook's `compare` form failed with exit 2 against the single-command app.
+- Actual windowed run on invented 200-row CSVs recorded in docs/repeated-windows.md: stable window unflagged, 0.8 SD shifted window flagged at the corrected 0.025 threshold.
+- Not rerun: hosted CI/container build for the new head, the Gaussian calibration pilot (deliberately not repeated) and the notebook's full training workflow. Hosted CI result must be checked after the branch update is applied.
+
+Remaining documented scope boundaries are unchanged: numeric continuous covariate drift only, supplied-windows familywise control only, no categorical drift, no labeled model-performance monitoring, no production alert policy, no main merge.
