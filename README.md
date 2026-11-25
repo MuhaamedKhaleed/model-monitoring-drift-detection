@@ -34,6 +34,8 @@ batch-monitor --reference /tmp/reference-batch.csv --current /tmp/current-batch.
 batch-monitor --reference /tmp/reference-batch.csv --current /tmp/reference-batch.csv
 ```
 
+The same comparison is available with the explicit `compare` word, which is the form the notebook uses: `batch-monitor compare --reference ... --current ...`. Both forms run the same check.
+
 Observed result excerpts:
 
 ```json
@@ -44,7 +46,23 @@ The identical-file sanity check returns statistic 0, p-value 1 and `drift: false
 
 For `m` features, each feature is flagged only if p < alpha/m. Default familywise alpha is 0.05; minimum batch is 30 rows. `--alpha` and `--min-batch` are explicit. A drift finding exits 0 because the check succeeded; invalid data/config exits 2. A p-value is not the probability that drift exists. Failure to reject is not proof of stability. Minimum size is a guardrail, not a power guarantee.
 
-CSV files need matching unique column names, equal-length columns, finite numeric values and enough rows. Reordered matching columns are aligned by name. Categorical/string columns, NaN/infinity, malformed widths and missing data are rejected rather than silently imputed. The caller chooses numeric continuous features. Discrete/tied values, dependent observations and repeated monitoring can invalidate or distort nominal significance. No correction across repeated time windows is implemented. Bonferroni is conservative and marginal tests miss joint dependence changes.
+CSV files need matching unique column names, equal-length columns, finite numeric values and enough rows. Reordered matching columns are aligned by name. Categorical/string columns, NaN/infinity and malformed widths are rejected rather than silently imputed. The caller chooses numeric continuous features.
+
+## Repeated windows against one reference
+
+Monitoring usually reviews several windows, and each extra window is another chance at a false alert. The `windows` command compares named current CSVs against one reference and splits the familywise level across features AND windows, so the supplied sequence as a whole keeps the stated level:
+
+```sh
+batch-monitor windows --reference reference.csv --current 2026-10.csv --current 2026-11.csv
+```
+
+Window names come from file stems and must be unique. The JSON reports the per-window and overall findings, the corrected threshold and per-input row counts. This controls the reviewed set of windows only. It is not a guarantee across open-ended future monitoring; an ongoing alert cadence still needs a separately chosen policy. See [docs/repeated-windows.md](docs/repeated-windows.md) for an actual run.
+
+## Missing-data policy
+
+Empty cells are missing data. The default `--on-missing reject` refuses any file containing them. `--on-missing drop` skips rows with a missing cell and reports `rows_read`, `rows_used`, `dropped_rows` and `missing_cells` for each input, because silently dropping rows can distort the comparison. Nonnumeric values are an error under both policies. Blank lines carry no cells and are ignored by the CSV reader under both policies.
+
+Discrete/tied values, dependent observations and repeated monitoring can invalidate or distort nominal significance. The `windows` command bounds the familywise level across the supplied windows; open-ended future monitoring has no correction. Bonferroni is conservative and marginal tests miss joint dependence changes.
 
 `--reference` wins over an optional `--env-file` containing `REFERENCE_CSV`. No automatic working-directory dotenv load or secrets are needed. Paths in the selected dotenv are interpreted from the current working directory.
 
@@ -58,9 +76,9 @@ CLI -> explicit paths/config -> finite numeric CSVs
                               -> JSON report
 ```
 
-- `core.py`: pure validation, numeric loading and statistical comparison.
-- `cli.py`: logging once, JSON and nonzero errors, optional dotenv path.
-- `tests/`: actual SciPy checks, correction/schema/failure regressions and CLI/config tests.
+- `core.py`: pure validation, numeric loading with an explicit missing-data policy, and single-batch/windowed statistical comparison.
+- `cli.py`: compare and windows forms (bare options keep the documented compare form), logging once, JSON and nonzero errors, optional dotenv path.
+- `tests/`: actual SciPy checks, correction/schema/failure regressions, missing-policy and windowed correction tests, module dispatch checks for both CLI forms and CLI/config tests.
 - Notebook: original RandomForest/Alibi/Colab experiment, outputs cleared. It is not imported by the package.
 
 ## Notebook corrections and boundaries
@@ -71,13 +89,13 @@ The package uses SciPy instead of serializing an Alibi detector with joblib, and
 
 ## Tests, CI and container
 
-23 offline tests pass with 95% statement coverage. Ruff, format and mypy pass. Pre-commit passed after files were tracked; the initial skipped run was not counted. See `docs/verification.md` for final record. No model accuracy or drift-detection quality follows from coverage.
+43 offline tests pass with 100% statement coverage. Ruff, format and mypy pass. Pre-commit passed after files were tracked; the initial skipped run was not counted. See `docs/verification.md` for final record. No model accuracy or drift-detection quality follows from coverage.
 
 CI uses a standard public-repository runner only, no cache, artifact upload or image publication. It skips if the repository becomes private. The multi-stage non-root image contains the real CSV/KS runtime, not notebook training dependencies or data. Local Docker is unavailable; hosted build/smoke status needs a live check before claiming success.
 
 ## Next work
 
-Evaluate false-positive rates/power on representative independent batches; define feature schema/reference versioning, repeated-window alert policy and missing/categorical data policy. Add labeled performance monitoring separately with held-out labels and a tested model pipeline. Review privacy and dataset/model rights before sharing data or deploying. No license, production alert policy, release or main merge is implied by this branch.
+Evaluate false-positive rates/power on representative independent batches; define feature schema/reference versioning, an open-ended alert cadence policy and a categorical-data policy. Add labeled performance monitoring separately with held-out labels and a tested model pipeline. Review privacy and dataset/model rights before sharing data or deploying. No license, production alert policy, release or main merge is implied by this branch.
 
 SciPy method reference: https://docs.scipy.org/doc/scipy-1.15.2/reference/generated/scipy.stats.ks_2samp.html
 
