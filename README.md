@@ -102,11 +102,11 @@ The package uses SciPy instead of serializing an Alibi detector with joblib, and
 
 43 offline tests pass with 100% statement coverage. Ruff, format and mypy pass. Pre-commit passed after files were tracked; the initial skipped run was not counted. See `docs/verification.md` for final record. No model accuracy or drift-detection quality follows from coverage.
 
-CI uses a standard public-repository runner only, no cache, artifact upload or image publication. It skips if the repository becomes private. The multi-stage non-root image contains the real CSV/KS runtime, not notebook training dependencies or data. Local Docker is unavailable; hosted build/smoke status needs a live check before claiming success.
+CI uses a standard public-repository runner only, no cache, artifact upload or image publication. It skips if the repository becomes private. The multi-stage non-root image contains the real CSV/KS runtime, not notebook training dependencies or data. Docker build/smoke is verified by hosted CI (Actions tab), not a local daemon.
 
 ## Next work
 
-Evaluate false-positive rates/power on representative independent batches; define feature schema/reference versioning, an open-ended alert cadence policy and a categorical-data policy. Add labeled performance monitoring separately with held-out labels and a tested model pipeline. Review privacy and dataset/model rights before sharing data or deploying. No license, production alert policy, release or main merge is implied by this branch.
+Evaluate false-positive rates/power on representative independent batches; define feature schema/reference versioning, an open-ended alert cadence policy and a categorical-data policy. Add labeled performance monitoring separately with held-out labels and a tested model pipeline. Review privacy and dataset/model rights before sharing data or deploying. No production alert policy or release is implied.
 
 SciPy method reference: https://docs.scipy.org/doc/scipy-1.15.2/reference/generated/scipy.stats.ks_2samp.html
 
