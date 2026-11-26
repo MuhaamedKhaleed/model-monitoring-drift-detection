@@ -1,0 +1,41 @@
+{
+  "synthetic_only": true,
+  "scope": "invented_numeric_covariate_drift_not_model_performance",
+  "quality_claim": false,
+  "result": {
+    "unchanged": {
+      "reference_rows": 100,
+      "current_rows": 100,
+      "alpha": 0.05,
+      "correction": "bonferroni",
+      "feature_threshold": 0.05,
+      "drift": false,
+      "features": [
+        {
+          "feature": "value",
+          "statistic": 0.0,
+          "p_value": 1.0,
+          "drift": false
+        }
+      ],
+      "scope": "numeric_covariate_drift_not_model_performance"
+    },
+    "shifted": {
+      "reference_rows": 100,
+      "current_rows": 100,
+      "alpha": 0.05,
+      "correction": "bonferroni",
+      "feature_threshold": 0.05,
+      "drift": true,
+      "features": [
+        {
+          "feature": "value",
+          "statistic": 1.0,
+          "p_value": 2.2087606931995054e-59,
+          "drift": true
+        }
+      ],
+      "scope": "numeric_covariate_drift_not_model_performance"
+    }
+  }
+}
